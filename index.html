@@ -11,7 +11,7 @@
             const root = document.querySelector('#root');
 
             const AnimalList = (props)=>{
-                const {animals, selectAnimal, deleteAnimal} = props
+                const {animals, selectAnimal, deleteAnimal, addAnimal} = props
                 return (
                     <ul>
                         {animals.map(animal => {
@@ -22,11 +22,9 @@
                             <button onClick ={()=>deleteAnimal(animal.id)}>x</button>
                             </div>
                         })}
-                        <form>
-                            <input name='name' placeholder ='Animal Name'/>
-                            <input name='lifespan' placeholder ='Lifespan in years' type = 'number'/>
-                            <button>Submit</button>
-                        </form>
+                            <input id='name' placeholder ='Animal Name'/>
+                            <input id='lifespan' placeholder ='Lifespan in years' type = 'number'/>
+                            <button onClick ={()=>addAnimal()}>Submit</button>
                     </ul>
                 )
             }
@@ -51,6 +49,7 @@
                     }
                     this.selectAnimal = this.selectAnimal.bind(this)
                     this.deleteAnimal = this.deleteAnimal.bind(this)
+                    this.addAnimal = this.addAnimal.bind(this)
                 }
 
                 async selectAnimal(animalId){
@@ -70,13 +69,27 @@
                     try{
                         const response = await axios.delete(`/api/animals/${animalId}`)
                         const animals = response.data
-                        console.log(animals);
                         this.setState({
                             animals: animals
                         })
                     }
                     catch(e){
-                        console.log('Error with deleteAnimal', e);
+                        console.log('Error with deleteAnimal');
+                    }
+                }
+
+                async addAnimal(){
+                    try{
+                        const name = document.querySelector('#name').value
+                        const lifespan = document.querySelector('#lifespan').value
+                        const response = await axios.post(`/api/animals`, {name, lifespan})
+                        const animals = response.data
+                        this.setState({
+                            animals: animals
+                        })
+                    }
+                    catch(e){
+                        console.log('Error with addAnimal');
                     }
                 }
 
@@ -100,7 +113,8 @@
                             <div>{
                                 this.state.selectedAnimal.id ? 
                                 <IndividualAnimal animal = {this.state.selectedAnimal} />
-                                : <AnimalList animals= {this.state.animals} selectAnimal = {this.selectAnimal} deleteAnimal = {this.deleteAnimal}/>
+                                : <AnimalList animals= {this.state.animals} selectAnimal = {this.selectAnimal} deleteAnimal = {this.deleteAnimal}
+                                addAnimal = {this.addAnimal}/>
                             }
                             </div>
                         </div>

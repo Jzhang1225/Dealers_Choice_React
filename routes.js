@@ -19,6 +19,17 @@ router.get('/:id', async(req,res,next)=>{
     }
 })
 
+router.post('/', async(req, res, next)=>{
+    try{
+        const animal = {name: req.body.name, lifespan: req.body.lifespan}
+        await Animal.create(animal)
+        res.send(await Animal.findAll())
+    }
+    catch(e){
+        next(e)
+    }
+})
+
 router.delete('/:id', async(req, res, next)=>{
     try{
         const animal = await Animal.findByPk(req.params.id)
