@@ -4,6 +4,7 @@ const app = express()
 const router = require('./routes')
 const path = require('path')
 
+app.use(express.json())
 app.use('/api/animals', router)
 
 app.get('/', (req,res,next)=>res.sendFile(path.join(__dirname,'index.html')))

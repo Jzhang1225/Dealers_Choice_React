@@ -11,14 +11,16 @@
             const root = document.querySelector('#root');
 
             const AnimalList = (props)=>{
-                const {animals, selectAnimal} = props
+                const {animals, selectAnimal, deleteAnimal} = props
                 return (
                     <ul>
                         {animals.map(animal => {
-                            return <li onClick = {()=>selectAnimal(animal.id)}>
+                            return <div>
+                                <li onClick = {()=>selectAnimal(animal.id)}>
                                 {animal.name}s have a lifespan of {animal.lifespan} years. <span></span>
-                                <button>x</button>
                             </li>
+                            <button onClick ={()=>deleteAnimal(animal.id)}>x</button>
+                            </div>
                         })}
                         <form>
                             <input name='name' placeholder ='Animal Name'/>
@@ -48,6 +50,7 @@
                         selectedAnimal: {}
                     }
                     this.selectAnimal = this.selectAnimal.bind(this)
+                    this.deleteAnimal = this.deleteAnimal.bind(this)
                 }
 
                 async selectAnimal(animalId){
@@ -60,6 +63,20 @@
                     }
                     catch(e){
                         console.log('Error with selectAnimal');
+                    }
+                }
+
+                async deleteAnimal(animalId){
+                    try{
+                        const response = await axios.delete(`/api/animals/${animalId}`)
+                        const animals = response.data
+                        console.log(animals);
+                        this.setState({
+                            animals: animals
+                        })
+                    }
+                    catch(e){
+                        console.log('Error with deleteAnimal', e);
                     }
                 }
 
@@ -83,7 +100,7 @@
                             <div>{
                                 this.state.selectedAnimal.id ? 
                                 <IndividualAnimal animal = {this.state.selectedAnimal} />
-                                : <AnimalList animals= {this.state.animals} selectAnimal = {this.selectAnimal}/>
+                                : <AnimalList animals= {this.state.animals} selectAnimal = {this.selectAnimal} deleteAnimal = {this.deleteAnimal}/>
                             }
                             </div>
                         </div>

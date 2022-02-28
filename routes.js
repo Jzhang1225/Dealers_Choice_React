@@ -19,4 +19,15 @@ router.get('/:id', async(req,res,next)=>{
     }
 })
 
+router.delete('/:id', async(req, res, next)=>{
+    try{
+        const animal = await Animal.findByPk(req.params.id)
+        await animal.destroy()
+        res.send(await Animal.findAll())
+    }
+    catch(e){
+        next(e)
+    }
+})
+
 module.exports = router
