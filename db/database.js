@@ -17,6 +17,7 @@ const Animal = database.define('animal', {
     },
     description: {
         type: TEXT,
+        defaultValue: "Sorry Prof no description here, will add in future update"
     },
 })
 
