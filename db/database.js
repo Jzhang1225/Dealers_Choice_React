@@ -17,7 +17,7 @@ const Animal = database.define('animal', {
     },
     description: {
         type: TEXT,
-    }
+    },
 })
 
 const initAndSeed = async () => {

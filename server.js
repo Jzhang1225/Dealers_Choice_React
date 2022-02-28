@@ -1,16 +1,12 @@
-const {Animal, initAndSeed, database} = require('./db/database')
+const {initAndSeed} = require('./db/database')
 const express = require('express')
 const app = express()
+const router = require('./routes')
+const path = require('path')
 
-app.get('/api/animals', async(req,res,next)=>{
-    try{
-        res.send(await Animal.findAll())
-    }
-    catch(e){
-        next(e)
-    }
-})
+app.use('/api/animals', router)
 
+app.get('/', (req,res,next)=>res.sendFile(path.join(__dirname,'index.html')))
 
 const setUp = async()=>{
     await initAndSeed();

@@ -1,0 +1,97 @@
+<html>
+    <head>
+        <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
+        <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
+        <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.0/axios.min.js" integrity="sha512-bPh3uwgU5qEMipS/VOmRqynnMXGGSRv+72H/N260MQeXZIK4PG48401Bsby9Nq5P5fz7hy5UGNmC/W1Z51h2GQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    </head>
+    <body>
+        <div id="root"></div>
+        <script type='text/babel'>
+            const root = document.querySelector('#root');
+
+            const AnimalList = (props)=>{
+                const {animals, selectAnimal} = props
+                return (
+                    <ul>
+                        {animals.map(animal => {
+                            return <li onClick = {()=>selectAnimal(animal.id)}>
+                                {animal.name}s have a lifespan of {animal.lifespan} years. <span></span>
+                                <button>x</button>
+                            </li>
+                        })}
+                        <form>
+                            <input name='name' placeholder ='Animal Name'/>
+                            <input name='lifespan' placeholder ='Lifespan in years' type = 'number'/>
+                            <button>Submit</button>
+                        </form>
+                    </ul>
+                )
+            }
+
+            const IndividualAnimal = (props)=>{
+                const {animal} = props
+                return(
+                    <div>
+                        <h2>{animal.name}</h2>
+                        <a href ='/'>Go Back </a>
+                        <p>{animal.description}</p>
+                    </div>
+                )
+            }
+
+            class Main extends React.Component {
+                constructor(){
+                    super();
+                    this.state = {
+                        animals: [],
+                        selectedAnimal: {}
+                    }
+                    this.selectAnimal = this.selectAnimal.bind(this)
+                }
+
+                async selectAnimal(animalId){
+                    try{
+                        const response = await axios.get(`/api/animals/${animalId}`)
+                        const animal = response.data
+                        this.setState({
+                            selectedAnimal: animal
+                        })
+                    }
+                    catch(e){
+                        console.log('Error with selectAnimal');
+                    }
+                }
+
+                async componentDidMount (){
+                    try{
+                        const response = await axios.get('/api/animals')
+                        const animals = response.data
+                        this.setState ({
+                            animals: animals
+                        })
+                    }
+                    catch(e){
+                        console.log('Error with mount');
+                    }
+                }
+
+                render() {
+                    return (
+                        <div>
+                            <h1>Animals for thought</h1>
+                            <div>{
+                                this.state.selectedAnimal.id ? 
+                                <IndividualAnimal animal = {this.state.selectedAnimal} />
+                                : <AnimalList animals= {this.state.animals} selectAnimal = {this.selectAnimal}/>
+                            }
+                            </div>
+                        </div>
+                    )
+                }
+            }
+
+            ReactDOM.render(<Main />, root);
+          </script>
+    </body>
+</html>
