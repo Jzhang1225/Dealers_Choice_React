@@ -18,8 +18,8 @@
                             return <div>
                                 <li onClick = {()=>selectAnimal(animal.id)}>
                                 {animal.name}s have a lifespan of {animal.lifespan} years. <span></span>
-                            </li>
-                            <button onClick ={()=>deleteAnimal(animal.id)}>x</button>
+                                </li>
+                                <button onClick ={()=>deleteAnimal(animal.id)}>x</button>
                             </div>
                         })}
                             <input id='name' placeholder ='Name Required'/>
@@ -61,7 +61,7 @@
                         })
                     }
                     catch(e){
-                        console.log('Error with selectAnimal');
+                        console.log('Error with selectAnimal', e);
                     }
                 }
 
@@ -74,7 +74,7 @@
                         })
                     }
                     catch(e){
-                        console.log('Error with deleteAnimal');
+                        console.log('Error with deleteAnimal', e);
                     }
                 }
 
@@ -89,7 +89,7 @@
                         })
                     }
                     catch(e){
-                        console.log('Error with addAnimal');
+                        console.log('Error with addAnimal', e);
                     }
                 }
 
@@ -102,7 +102,7 @@
                         })
                     }
                     catch(e){
-                        console.log('Error with mount');
+                        console.log('Error with mount', e);
                     }
                 }
 
