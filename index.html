@@ -19,7 +19,7 @@
                                 <li onClick = {()=>selectAnimal(animal.id)}>
                                 {animal.name}s have a lifespan of {animal.lifespan} years. <span></span>
                                 </li>
-                                <button onClick ={()=>deleteAnimal(animal.id)}>x</button>
+                                <button onClick ={()=>deleteAnimal(animal)}>x</button>
                             </div>
                         })}
                             <input id='name' placeholder ='Name Required'/>
@@ -65,9 +65,10 @@
                     }
                 }
 
-                async deleteAnimal(animalId){
+                async deleteAnimal(animal){
                     try{
-                        const response = await axios.delete(`/api/animals/${animalId}`)
+                        const response = await axios.delete(`/api/animals/${animal.id}`)
+                        //my delete route is sending back an Animal.findAll after deleting but I realize now that filtering out the animal is easier
                         const animals = response.data
                         this.setState({
                             animals: animals
